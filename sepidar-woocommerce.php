@@ -14,11 +14,14 @@
 
 require_once('settings.php');
 require_once('api.php');
+require_once('db.php');
 
 error_log("Running the shit\n");
 
+register_activation_hook(__FILE__, 'sw_db_create_database');
 add_action('sw_cron_update_quantity', 'update_quantity_data');
 add_action('sw_cron_update_price', 'update_price_data');
+add_action('woocommerce_payment_complete', 'sw_payment_complete');
 add_filter('cron_schedules', 'sw_add_cron_interval');
 
 if (! wp_next_scheduled('sw_cron_update_price')) {
@@ -49,7 +52,7 @@ function update_quantity_data() {
         if ($product_id == 0)
             continue;
         error_log('Found product: ' . $sku);
-        $product = new WC_Product($product_id);
+        $product = wc_get_product($product_id);
         $product->set_stock_quantity($quantity);
         $product->save();
     }
@@ -63,8 +66,12 @@ function update_price_data() {
         if ($product_id == 0)
             continue;
         error_log('Found product: ' . $sku);
-        $product = new WC_Product($product_id);
+        $product = wc_get_product($product_id);
         $product->set_regular_price($price);
         $product->save();
     }
+}
+
+function sw_payment_complete($order_id) {
+    sw_db_add_todo_factor($order_ir);
 }
