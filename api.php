@@ -66,6 +66,6 @@ function fetch_all_sepidar_products_price() {
     $products = array_filter($products, "sw_filter_is_online_shop");
     $result = array();
     foreach($products as $product)
-        $result[$product['itemCode']] = $product['fee'];
+        $result[$product['itemCode']] = $product['fee'] / 10;
     return $result;
 }

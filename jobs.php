@@ -1,4 +1,7 @@
 <?php
+require_once('api.php');
+require_once('db.php');
+
 function update_quantity_data() {
     error_log("Updating quantity data");
     $sep_quantities_list = fetch_all_sepidar_products_quantity();
@@ -24,5 +27,27 @@ function update_price_data() {
         $product = wc_get_product($product_id);
         $product->set_regular_price($price);
         $product->save();
+    }
+}
+
+function sw_complete_todo_factors() {
+    $todos = sw_db_get_todo_factors();
+    foreach ($todos as $todo) {
+        $order = wc_get_order($todo->order_id);
+        switch ($todo->stage) {
+        case 0:
+            if (!sw_api_register_invoice($order))
+                break;
+            $todo->stage++;
+        case 1:
+            if (!sw_api_register_receipt($order))
+                break;
+            $todo->stage++;
+        case 2:
+            if (!sw_api_register_delivery($order))
+                break;
+            $todo->stage++;
+        }
+        sw_db_update_todo_factor($todo);
     }
 }
