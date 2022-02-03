@@ -34,7 +34,7 @@ function sw_complete_todo_factors() {
     error_log('Completing todo factors');
     $todos = sw_db_get_todo_factors();
     foreach ($todos as $todo) {
-        error_log('Completing todo ' . $todo->order_id);
+        error_log("Completing todo $todo->order_id($todo->stage)");
         $order = wc_get_order($todo->order_id);
         switch ($todo->stage) {
         case 0:
@@ -46,6 +46,7 @@ function sw_complete_todo_factors() {
                 break;
             $todo->stage++;
         }
+        error_log("Completed todo $todo->order_id($todo->stage)");
         sw_db_update_todo_factor($todo);
     }
 }
