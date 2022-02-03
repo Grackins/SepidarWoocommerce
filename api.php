@@ -23,6 +23,11 @@ function sw_filter_is_online_shop($product) {
     return $product['saleTypeNumber'] == 2;
 }
 
+function sw_get_invoice_number($order_id) {
+    global $SW_BASE_INVOICE_NUMBER;
+    return $order_id - $SW_BASE_INVOICE_NUMBER;
+}
+
 function fetch_all_sepidar_products_quantity() {
     global $REQUEST_HEADERS;
     global $QUANTITY_FIELD_NAME, $SKU_FIELD_NAME;
@@ -89,7 +94,7 @@ function sw_api_register_invoice($order) {
             "addition"=> 0,
             "currencyRate"=> 1,
             "stockCode"=> 101,
-            "number" => $order->id - 8000,
+            "number" => sw_get_invoice_number($order->id),
             "date" => $date,
             "itemcode" => strval($itemcode),
             "quantity" => $quantity,
@@ -120,7 +125,7 @@ function sw_api_register_invoice($order) {
 function sw_api_register_delivery($order) {
     global $REQUEST_HEADERS;
     $data = array(
-        'invoicenumber' => $order->id,
+        'invoicenumber' => sw_get_invoice_number($order->id),
         'saletypenumner' => 2,
     );
     $args = array(
