@@ -94,7 +94,7 @@ function sw_api_register_invoice($order) {
             "addition"=> 0,
             "currencyRate"=> 1,
             "stockCode"=> 101,
-            "number" => sw_get_invoice_number($order->id),
+            "number" => sw_get_invoice_number($order->get_id()),
             "date" => $date,
             "itemcode" => strval($itemcode),
             "quantity" => $quantity,
@@ -125,7 +125,7 @@ function sw_api_register_invoice($order) {
 function sw_api_register_delivery($order) {
     global $REQUEST_HEADERS;
     $data = array(
-        'invoicenumber' => sw_get_invoice_number($order->id),
+        'invoicenumber' => sw_get_invoice_number($order->get_id()),
         'saletypenumner' => 2,
     );
     $args = array(
