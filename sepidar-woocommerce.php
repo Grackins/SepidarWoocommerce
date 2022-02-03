@@ -7,7 +7,7 @@
  * Author URI:      https://github.com/GarceHawkins
  * Text Domain:     sepidar-woocommerce
  * Domain Path:     /languages
- * Version:         1.1.4
+ * Version:         1.1.5
  *
  * @package         Sepidar_Woocommerce
  */
