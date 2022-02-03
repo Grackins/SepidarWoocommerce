@@ -31,8 +31,10 @@ function update_price_data() {
 }
 
 function sw_complete_todo_factors() {
+    error_log('Completing todo factors');
     $todos = sw_db_get_todo_factors();
     foreach ($todos as $todo) {
+        error_log('Completing todo ' . $todo->order_id);
         $order = wc_get_order($todo->order_id);
         switch ($todo->stage) {
         case 0:

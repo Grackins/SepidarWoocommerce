@@ -45,5 +45,6 @@ function sw_add_cron_interval( $schedules ) {
 
 
 function sw_payment_complete($order_id) {
-    sw_db_add_todo_factor($order_ir);
+    error_log('Payment complete ' . $order_id);
+    sw_db_add_todo_factor($order_id);
 }

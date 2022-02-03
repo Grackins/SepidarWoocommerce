@@ -73,15 +73,15 @@ function fetch_all_sepidar_products_price() {
 function sw_api_register_invoice($order) {
     global $REQUEST_HEADERS;
     $data = array();
-	$date_modified = $order->get_date_modified();
-	$date = $date_modified->format('Y-m-d');
-	foreach ($order->get_items() as $item_key => $item ){
-		$itemcode = $item->get_product_id();
-		$quantity = $item->get_quantity();
-		$product = $item->get_product();
-		$price = $product->get_price();
-		$fee = $price * 10000;
-		$item_data = array(
+    $date_modified = $order->get_date_modified();
+    $date = $date_modified->format('Y-m-d');
+    foreach ($order->get_items() as $item_key => $item ){
+        $itemcode = $item->get_product_id();
+        $quantity = $item->get_quantity();
+        $product = $item->get_product();
+        $price = $product->get_price();
+        $fee = $price * 10000;
+        $item_data = array(
             "sourceid"=> 0,
             "customercode"=> "20001",
             "saletypenumber"=> 2,
@@ -95,8 +95,8 @@ function sw_api_register_invoice($order) {
             "quantity" => $quantity,
             "fee" => $fee
         );
-		array_push($data, $item_data);
-	}
+        array_push($data, $item_data);
+    }
     $args = array(
         'headers' => $REQUEST_HEADERS,
         'timeout' => 20,
@@ -105,8 +105,11 @@ function sw_api_register_invoice($order) {
     );
     $url = get_url('RegisterInvoice');
     $req = wp_remote_post($url, $args);
-    if (is_wp_error($req))
+    if (is_wp_error($req)) {
+        error_log('Failed to register invoice');
+        error_log(print_r($req->errors, true));
         return false;
+    }
     $body = wp_remote_retrieve_body($req);
     $result = json_decode($body, true);
     if (strlen($result['message']) == 0)
@@ -128,8 +131,11 @@ function sw_api_register_delivery($order) {
     );
     $url = get_url('RegisterInventorydelivery');
     $req = wp_remote_post($url, $args);
-    if (is_wp_error($req))
+    if (is_wp_error($req)) {
+        error_log('Failed to register delivery');
+        error_log(print_r($req->errors, true));
         return false;
+    }
     $body = wp_remote_retrieve_body($req);
     $result = json_decode($body, true);
     if (strlen($result['message']) == 0)
