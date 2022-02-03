@@ -1,4 +1,6 @@
 <?php
+require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
 class SW_TodoFactor {
     public $order_id;
     public $stage;
