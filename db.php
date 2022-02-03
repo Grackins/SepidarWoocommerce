@@ -43,7 +43,7 @@ function sw_db_add_todo_factor($order_id) {
 function sw_db_get_todo_factors() {
     global $wpdb;
     $table = table_name('todo_factors');
-    $orders = $wpdb->get_results("SELECT order_id FROM $table");
+    $orders = $wpdb->get_results("SELECT order_id, stage FROM $table");
     $orders = array_map(function ($row) {
         $todo_factor = new SW_TodoFactor($row->order_id, $row->stage);
         return $todo_factor;
