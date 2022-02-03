@@ -40,10 +40,6 @@ function sw_complete_todo_factors() {
                 break;
             $todo->stage++;
         case 1:
-            if (!sw_api_register_receipt($order))
-                break;
-            $todo->stage++;
-        case 2:
             if (!sw_api_register_delivery($order))
                 break;
             $todo->stage++;
