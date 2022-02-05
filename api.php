@@ -78,8 +78,8 @@ function fetch_all_sepidar_products_price() {
 function sw_api_register_invoice($order) {
 	global $REQUEST_HEADERS;
 	$data = array();
-	$date_modified = $order->get_date_modified();
-	$date = $date_modified->format('Y-m-d');
+	$date_paid = $order->get_date_paid();
+	$date = $date_paid->format('Y-m-d');
 	foreach ($order->get_items() as $item_key => $item ){
 		$quantity = $item->get_quantity();
 		//$product = wc_get_product($item);
@@ -103,6 +103,23 @@ function sw_api_register_invoice($order) {
 			"itemcode" => strval($item_sku),
 			"quantity" => $quantity,
 			"fee" => $fee
+		);
+		array_push($data, $item_data);
+	}
+	if ($order->get_shipping_method()){
+		$item_data = array(
+			"sourceid"=> 0,
+			"customercode"=> "20001",
+			"saletypenumber"=> 2,
+			"discount"=> 0,
+			"addition"=> 0,
+			"currencyRate"=> 1,
+			"stockCode"=> 101,
+			"number" => sw_get_invoice_number($order->get_id()),
+			"date" => $date,
+			"itemcode" => "******",
+			"quantity" => 1,
+			"fee" => 200000
 		);
 		array_push($data, $item_data);
 	}
