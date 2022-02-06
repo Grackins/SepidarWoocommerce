@@ -6,7 +6,8 @@ $BASE_URL = 'http://' . $SEPIDAR_ADDRESS . ':' . $SEPIDAR_PORT .
             '/api/v1';
 
 $REQUEST_HEADERS = array(
-    'Authorization' => 'Basic ' . base64_encode($SEPIDAR_USERNAME . ':' . $SEPIDAR_PASSWORD)
+    'Authorization' => 'Basic ' . base64_encode($SEPIDAR_USERNAME . ':' . $SEPIDAR_PASSWORD),
+	'Content-Type' => 'application/json; charset=utf-8'
 );
 
 
@@ -16,11 +17,12 @@ function get_url($method_name) {
 }
 
 function sw_filter_is_online_market($product) {
-    return $product['stockcode'] == 1;
+    return $product['stockcode'] == 101;
 }
 
 function sw_filter_is_online_shop($product) {
     return $product['saleTypeNumber'] == 2;
+//    add 8 for sale fee
 }
 
 function sw_get_invoice_number($order_id) {
@@ -71,7 +73,7 @@ function fetch_all_sepidar_products_price() {
     $products = array_filter($products, "sw_filter_is_online_shop");
     $result = array();
     foreach($products as $product)
-        $result[$product['itemCode']] = $product['fee'] / 10;
+        $result[$product['itemCode']] = $product['fee'] / 10000;
     return $result;
 }
 
