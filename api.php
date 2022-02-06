@@ -106,7 +106,7 @@ function sw_api_register_invoice($order) {
 		);
 		array_push($data, $item_data);
 	}
-	if ($order->get_shipping_method()){
+	/*if ($order->get_shipping_method()){
 		$item_data = array(
 			"sourceid"=> 0,
 			"customercode"=> "20001",
@@ -122,7 +122,7 @@ function sw_api_register_invoice($order) {
 			"fee" => 200000
 		);
 		array_push($data, $item_data);
-	}
+	}*/
 	//error_log(print_r(json_encode($data), true));
 	$args = array(
 		'headers' => $REQUEST_HEADERS,
@@ -149,6 +149,8 @@ function sw_api_register_invoice($order) {
 		return false;
 	error_log("alireza3");
 	if (strlen($result['message']) == 0)
+		return true;
+	elseif (strval($result['message']) === "8-There is Invoice Number.")
 		return true;
 	return false;
 }
