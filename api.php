@@ -79,19 +79,17 @@ function fetch_all_sepidar_products_price() {
 
 function sw_api_register_invoice($order) {
 	global $REQUEST_HEADERS;
+	error_log("send invoice $order->get_id");
 	$data = array();
 	$date_paid = $order->get_date_paid();
 	$date = $date_paid->format('Y-m-d');
 	foreach ($order->get_items() as $item_key => $item ){
 		$quantity = $item->get_quantity();
-		//$product = wc_get_product($item);
 		$product = $item->get_product();
 		//$itemcode = $item->get_product_id();
 		$item_sku = $product->get_sku();
 		$price = $product->get_price();
 		$fee = $price * 10000;
-		//error_log($itemcode);
-		//error_log($item_sku);
 		$item_data = array(
 			"sourceid"=> 0,
 			"customercode"=> "20001",
@@ -140,16 +138,13 @@ function sw_api_register_invoice($order) {
 		error_log(print_r($req->errors, true));
 		return false;
 	}
-	error_log("alireza1");
 	$body = wp_remote_retrieve_body($req);
 	$result = json_decode($body, true);
-	error_log("alireza2");
 	error_log(wp_remote_retrieve_response_code($req));
 	//error_log();
 	error_log(print_r($result, true));
 	if (wp_remote_retrieve_response_code($req) != 200)
 		return false;
-	error_log("alireza3");
 	if (strlen($result['message']) == 0)
 		return true;
 	elseif (strval($result['message']) === "8-There is Invoice Number.")
@@ -159,6 +154,7 @@ function sw_api_register_invoice($order) {
 
 function sw_api_register_delivery($order) {
 	global $REQUEST_HEADERS;
+	error_log("send delivery $order->get_id");
 	$data = array(
 		'invoicenumber' => sw_get_invoice_number($order->get_id()),
 		'saletypenumner' => 2,

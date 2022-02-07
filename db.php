@@ -45,8 +45,7 @@ function sw_db_get_todo_factors() {
     $table = table_name('todo_factors');
     $orders = $wpdb->get_results("SELECT order_id, stage FROM $table");
     $orders = array_map(function ($row) {
-        $todo_factor = new SW_TodoFactor($row->order_id, $row->stage);
-        return $todo_factor;
+	    return new SW_TodoFactor($row->order_id, $row->stage);
     }, $orders);
     return $orders;
 }
