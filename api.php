@@ -30,6 +30,12 @@ function sw_get_invoice_number($order_id) {
     return $order_id - $SW_BASE_INVOICE_NUMBER;
 }
 
+function sw_get_sale_type($product) {
+	if ($product->get_sale_price() < $product->get_price())
+		return 8;
+	return 2;
+}
+
 function fetch_all_sepidar_products_quantity() {
     global $REQUEST_HEADERS;
     global $QUANTITY_FIELD_NAME, $SKU_FIELD_NAME;
@@ -83,17 +89,18 @@ function sw_api_register_invoice($order) {
 	$data = array();
 	$date_paid = $order->get_date_paid();
 	$date = $date_paid->format('Y-m-d');
-	foreach ($order->get_items() as $item_key => $item ){
+	foreach ($order->get_items() as $item_key => $item){
 		$quantity = $item->get_quantity();
 		$product = $item->get_product();
 		//$itemcode = $item->get_product_id();
 		$item_sku = $product->get_sku();
+		$sale_type = sw_get_sale_type($product);
 		$price = $product->get_price();
 		$fee = $price * 10000;
 		$item_data = array(
 			"sourceid"=> 0,
 			"customercode"=> "20001",
-			"saletypenumber"=> 2,
+			"saletypenumber"=> $sale_type,
 			"discount"=> 0,
 			"addition"=> 0,
 			"currencyRate"=> 1,
