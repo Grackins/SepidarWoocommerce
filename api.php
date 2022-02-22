@@ -31,6 +31,8 @@ function sw_get_invoice_number($order_id) {
 }
 
 function sw_get_sale_type($product) {
+	if ($product->get_sale_price() == null)
+		return 2;
 	if ($product->get_sale_price() < $product->get_price())
 		return 8;
 	return 2;

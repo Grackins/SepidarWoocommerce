@@ -24,9 +24,11 @@ function update_price_data() {
         if ($product_id == 0)
             continue;
         error_log('Found product: ' . $sku);
-        $product = wc_get_product($product_id);
-        $product->set_regular_price($price);
-        $product->save();
+        if ($price > 1) {
+	        $product = wc_get_product( $product_id );
+	        $product->set_regular_price( $price );
+	        $product->save();
+        }
     }
 }
 
