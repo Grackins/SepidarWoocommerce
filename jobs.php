@@ -23,10 +23,11 @@ function update_price_data() {
         $product_id = wc_get_product_id_by_sku($sku);
         if ($product_id == 0)
             continue;
-        error_log('Found product: ' . $sku);
+        error_log('Found price product: ' . $sku);
         if ($price > 1) {
 	        $product = wc_get_product( $product_id );
 	        $product->set_regular_price( $price );
+//	        $product->set_sale_price( $price );
 	        $product->save();
         }
     }

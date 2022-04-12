@@ -165,7 +165,7 @@ function sw_api_register_delivery($order) {
 	global $REQUEST_HEADERS;
 	error_log("send delivery $order->get_id");
 	$data = array(
-		'invoicenumber' => sw_get_invoice_number($order->get_id()),
+		'invoicenumber' => sw_get_invoice_number($order->get_id),
 		'saletypenumner' => 2,
 	);
 	$args = array(
