@@ -87,7 +87,7 @@ function fetch_all_sepidar_products_price() {
 
 function sw_api_register_invoice($order) {
 	global $REQUEST_HEADERS;
-	error_log("send invoice $order->get_id");
+	error_log("send invoice $order->get_id()");
 	$data = array();
 	$date_paid = $order->get_date_paid();
 	$date = $date_paid->format('Y-m-d');
@@ -163,9 +163,9 @@ function sw_api_register_invoice($order) {
 
 function sw_api_register_delivery($order) {
 	global $REQUEST_HEADERS;
-	error_log("send delivery $order->get_id");
+	error_log("send delivery $order->get_id()");
 	$data = array(
-		'invoicenumber' => sw_get_invoice_number($order->get_id),
+		'invoicenumber' => sw_get_invoice_number($order->get_id()),
 		'saletypenumner' => 2,
 	);
 	$args = array(
