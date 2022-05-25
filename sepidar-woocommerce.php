@@ -34,7 +34,7 @@ if (! wp_next_scheduled('sw_cron_save_factors')) {
     wp_schedule_event(time(), 'save_factors_interval', 'sw_cron_save_factors');
 }
 
-function sw_add_cron_interval( $schedules ) { 
+function sw_add_cron_interval( $schedules ) {
     global $SW_QUANTITY_UPDATE_INTERVAL, $SW_PRICE_UPDATE_INTERVAL;
     global $SW_SAVE_FACTORS_INTERVAL;
     $quantity_msg = 'Every ' . $SW_QUANTITY_UPDATE_INTERVAL . ' Secs';
@@ -54,6 +54,8 @@ function sw_add_cron_interval( $schedules ) {
 
 
 function sw_payment_complete($order_id) {
+	global $SW_SEND_FACTOR;
     error_log('Payment complete ' . $order_id);
-    sw_db_add_todo_factor($order_id);
+    if ($SW_SEND_FACTOR)
+        sw_db_add_todo_factor($order_id);
 }
