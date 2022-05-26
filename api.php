@@ -85,7 +85,7 @@ function fetch_all_sepidar_products_price() {
     return $result;
 }
 
-function sw_api_register_invoice($order) {
+function sw_api_register_invoice($order, $factor_number) {
 	global $REQUEST_HEADERS;
 	error_log("send invoice $order->get_id()");
 	$data = array();
@@ -107,7 +107,7 @@ function sw_api_register_invoice($order) {
 			"addition"=> 0,
 			"currencyRate"=> 1,
 			"stockCode"=> 101,
-			"number" => sw_get_invoice_number($order->get_id()),
+			"number" => $factor_number,
 			"date" => $date,
 			"itemcode" => strval($item_sku),
 			"quantity" => $quantity,
@@ -124,7 +124,7 @@ function sw_api_register_invoice($order) {
 			"addition"=> 0,
 			"currencyRate"=> 1,
 			"stockCode"=> 101,
-			"number" => sw_get_invoice_number($order->get_id()),
+			"number" => $factor_number,
 			"date" => $date,
 			"itemcode" => "******",
 			"quantity" => 1,
@@ -161,11 +161,11 @@ function sw_api_register_invoice($order) {
 	return false;
 }
 
-function sw_api_register_delivery($order) {
+function sw_api_register_delivery($order, $factor_number) {
 	global $REQUEST_HEADERS;
 	error_log("send delivery $order->get_id()");
 	$data = array(
-		'invoicenumber' => sw_get_invoice_number($order->get_id()),
+		'invoicenumber' => $factor_number,
 		'saletypenumner' => 2,
 	);
 	$args = array(

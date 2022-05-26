@@ -41,11 +41,11 @@ function sw_complete_todo_factors() {
         $order = wc_get_order($todo->order_id);
         switch ($todo->stage) {
         case 0:
-            if (!sw_api_register_invoice($order))
+            if (!sw_api_register_invoice($order, $todo->factor_number))
                 break;
             $todo->stage++;
         case 1:
-            if (!sw_api_register_delivery($order))
+            if (!sw_api_register_delivery($order, $todo->factor_number))
                 break;
             $todo->stage++;
         }
