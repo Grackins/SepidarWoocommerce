@@ -151,7 +151,8 @@ function sw_api_register_invoice( $order, $factor_number ) {
 		return true;
 	} elseif ( strval( $result['message'] ) === "8-There is Invoice Number." ) {
 		error_log( 'Failed to register invoice because of Invoice is exists: ' . $factor_number );
-		return true;
+
+		return false;
 	}
 
 	return false;
