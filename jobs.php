@@ -9,7 +9,7 @@ function update_quantity_data() {
         $product_id = wc_get_product_id_by_sku($sku);
         if ($product_id == 0)
             continue;
-        error_log('Found product: ' . $sku);
+        error_log('Found quantity product: ' . $sku);
         $product = wc_get_product($product_id);
         $product->set_stock_quantity($quantity);
         $product->save();
@@ -37,7 +37,7 @@ function sw_complete_todo_factors() {
     error_log('Completing todo factors');
     $todos = sw_db_get_todo_factors();
     foreach ($todos as $todo) {
-        error_log("Completing todo $todo->order_id($todo->stage)");
+        error_log("Completing todo $todo->order_id($todo->stage) with $todo->factor_number number");
         $order = wc_get_order($todo->order_id);
         switch ($todo->stage) {
         case 0:
