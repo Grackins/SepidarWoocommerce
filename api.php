@@ -96,9 +96,9 @@ function fetch_all_sepidar_products_price() {
 	return $result;
 }
 
-function sw_api_register_invoice( $order, $factor_number ) {
+function sw_api_register_invoice( $order, $factor_id ) {
 	global $REQUEST_HEADERS;
-	error_log( "send invoice $order->get_id()" );
+	error_log( "send invoice $order->id" );
 	$data      = array();
 	$date_paid = $order->get_date_paid();
 	$date      = $date_paid->format( 'Y-m-d' );
@@ -117,7 +117,7 @@ function sw_api_register_invoice( $order, $factor_number ) {
 			"addition"       => 0,
 			"currencyRate"   => 1,
 			"stockCode"      => 101,
-			"number"         => $factor_number,
+			"number"         => $factor_id,
 			"date"           => $date,
 			"itemcode"       => strval( $item_sku ),
 			"quantity"       => $quantity,
@@ -150,7 +150,7 @@ function sw_api_register_invoice( $order, $factor_number ) {
 	if ( strlen( $result['message'] ) == 0 ) {
 		return true;
 	} elseif ( strval( $result['message'] ) === "8-There is Invoice Number." ) {
-		error_log( 'Failed to register invoice because of Invoice is exists: ' . $factor_number );
+		error_log( 'Failed to register invoice because of Invoice is exists: ' . $factor_id );
 
 		return false;
 	}
@@ -158,11 +158,11 @@ function sw_api_register_invoice( $order, $factor_number ) {
 	return false;
 }
 
-function sw_api_register_delivery( $order, $factor_number ) {
+function sw_api_register_delivery( $order, $factor_id ) {
 	global $REQUEST_HEADERS;
-	error_log( "send delivery $order->get_id()" );
+	error_log( "send delivery $order->id" );
 	$data = array(
-		'invoicenumber'  => $factor_number,
+		'invoicenumber'  => $factor_id,
 		'saletypenumner' => 2,
 	);
 	$args = array(

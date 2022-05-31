@@ -37,15 +37,15 @@ function sw_complete_todo_factors() {
     error_log('Completing todo factors');
     $todos = sw_db_get_todo_factors();
     foreach ($todos as $todo) {
-        error_log("Completing todo $todo->order_id($todo->stage) with $todo->factor_number number");
+        error_log("Completing todo $todo->order_id($todo->stage) with $todo->factor_id number");
         $order = wc_get_order($todo->order_id);
         switch ($todo->stage) {
         case 0:
-            if (!sw_api_register_invoice($order, $todo->factor_number))
+            if (!sw_api_register_invoice($order, $todo->factor_id))
                 break;
             $todo->stage++;
         case 1:
-            if (!sw_api_register_delivery($order, $todo->factor_number))
+            if (!sw_api_register_delivery($order, $todo->factor_id))
                 break;
             $todo->stage++;
         }
