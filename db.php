@@ -40,7 +40,7 @@ function sw_db_add_todo_factor($order_id) {
     error_log('Adding todo factor ' . $order_id);
     $table = table_name('todo_factors');
     $factor_number = sw_db_get_last_factor_number();
-    $sql = "INSERT INTO $table (order_id, factor_number, stage) VALUES ($order_id, 0);";
+    $sql = "INSERT INTO $table (order_id, factor_number, stage) VALUES ($order_id, $factor_number, 0);";
     dbDelta($sql);
 }
 
