@@ -40,7 +40,7 @@ function sw_db_create_database() {
 function sw_db_add_todo_factor($order_id) {
     error_log('Adding todo factor ' . $order_id);
     $table = table_name('todo_factors');
-    $factor_id = sw_db_get_last_factor_number();
+    $factor_id = sw_db_get_last_factor_number() + 1;
     $sql = "INSERT INTO $table (order_id, factor_id, stage) VALUES ($order_id, $factor_id, 0);";
     dbDelta($sql);
 }
@@ -70,11 +70,11 @@ function sw_db_get_last_factor_number() {
 	global $wpdb;
 	global $SW_BASE_INVOICE_NUMBER;
 	$table = table_name('todo_factors');
-	$factor_number = $wpdb->get_results("SELECT LAST factor_id FROM $table LIMIT 1");
+	$factor_number = $wpdb->get_results("SELECT factor_id FROM $table ORDER BY factor_id DESC LIMIT 1");
 	if ($factor_number == null)
 		return $SW_BASE_INVOICE_NUMBER;
 	$factor_number = array_map(function ($row) {
 		return $row->factor_id;
 	}, $factor_number);
-	return ($factor_number+ 1);
+	return $factor_number[0];
 }
