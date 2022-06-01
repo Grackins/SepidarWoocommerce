@@ -1,5 +1,6 @@
 <?php
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+require_once('settings.php');
 
 class SW_TodoFactor {
     public $order_id;
@@ -67,9 +68,13 @@ function sw_db_update_todo_factor($todo) {
 
 function sw_db_get_last_factor_number() {
 	global $wpdb;
+	global $SW_BASE_INVOICE_NUMBER;
 	$table = table_name('todo_factors');
 	$factor_number = $wpdb->get_results("SELECT LAST factor_id FROM $table LIMIT 1");
 	if ($factor_number == null)
-		return 1;
-	return $factor_number['factor_id'];
+		return $SW_BASE_INVOICE_NUMBER;
+	$factor_number = array_map(function ($row) {
+		return $row->factor_id;
+	}, $factor_number);
+	return ($factor_number+ 1);
 }
