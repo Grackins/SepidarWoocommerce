@@ -117,7 +117,7 @@ function sw_api_register_invoice( $order, $factor_id ) {
 			"addition"       => 0,
 			"currencyRate"   => 1,
 			"stockCode"      => 101,
-			"number"         => $factor_id,
+			"number"         => intval( $factor_id ),
 			"date"           => $date,
 			"itemcode"       => strval( $item_sku ),
 			"quantity"       => $quantity,
@@ -162,7 +162,7 @@ function sw_api_register_delivery( $order, $factor_id ) {
 	global $REQUEST_HEADERS;
 	error_log( "send delivery $order->id" );
 	$data = array(
-		'invoicenumber'  => $factor_id,
+		'invoicenumber'  => intval( $factor_id ),
 		'saletypenumner' => 2,
 	);
 	$args = array(
