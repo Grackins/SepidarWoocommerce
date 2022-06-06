@@ -59,9 +59,12 @@ function sw_db_update_todo_factor($todo) {
     $table = table_name('todo_factors');
     $order_id = $todo->order_id;
     $stage = $todo->stage;
-    if ($todo->stage == 2)
-        $sql = "DELETE FROM $table WHERE order_id=$order_id";
-    else
+    if ($todo->stage == 2) {
+	    $sql = "UPDATE $table SET stage=$stage WHERE order_id=$order_id";
+	    error_log("fuck this shit!");
+	    dbDelta($sql);
+	    $sql = "DELETE FROM $table WHERE order_id=$order_id";
+    } else
         $sql = "UPDATE $table SET stage=$stage WHERE order_id=$order_id";
     dbDelta($sql);
 }
