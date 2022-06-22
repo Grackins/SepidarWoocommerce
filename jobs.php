@@ -1,6 +1,7 @@
 <?php
 require_once('api.php');
 require_once('db.php');
+require_once('settings.php');
 
 function update_quantity_data() {
     error_log("Updating quantity data");
