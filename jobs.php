@@ -34,7 +34,12 @@ function update_price_data() {
 }
 
 function sw_complete_todo_factors() {
+	global $SW_SEND_FACTOR;
     error_log('Completing todo factors');
+    if (!$SW_SEND_FACTOR) {
+	    error_log( 'Send factor is off' );
+	    return;
+    }
     $todos = sw_db_get_todo_factors();
     foreach ($todos as $todo) {
         error_log("Completing todo $todo->order_id($todo->stage) with $todo->factor_id number");

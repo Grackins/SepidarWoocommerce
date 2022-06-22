@@ -54,8 +54,8 @@ function sw_add_cron_interval( $schedules ) {
 
 
 function sw_payment_complete($order_id) {
-	global $SW_SEND_FACTOR;
+	global $SW_SAVE_FACTOR;
     error_log('Payment complete ' . $order_id);
-    if ($SW_SEND_FACTOR)
+    if ($SW_SAVE_FACTOR)
         sw_db_add_todo_factor($order_id);
 }
