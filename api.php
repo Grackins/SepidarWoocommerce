@@ -23,7 +23,10 @@ function sw_filter_is_online_market( $product ) {
 
 function sw_filter_is_online_shop( $product ) {
 	return $product['saleTypeNumber'] == 2;
-//    add 8 for sale fee
+}
+
+function sw_filter_is_online_shop_sale( $product ) {
+	return $product['saleTypeNumber'] == 8;
 }
 
 function sw_get_invoice_number( $order_id ) {
@@ -70,7 +73,7 @@ function fetch_all_sepidar_products_quantity() {
 	return $result;
 }
 
-function fetch_all_sepidar_products_price() {
+function fetch_all_sepidar_products_price($sale) {
 	global $REQUEST_HEADERS;
 	$url  = get_url( 'PriceNoteList' );
 	$args = array(
@@ -87,7 +90,10 @@ function fetch_all_sepidar_products_price() {
 
 	$body     = wp_remote_retrieve_body( $req );
 	$products = json_decode( $body, true );
-	$products = array_filter( $products, "sw_filter_is_online_shop" );
+	if ($sale)
+		$products = array_filter( $products, "sw_filter_is_online_shop_sale" );
+	else
+		$products = array_filter( $products, "sw_filter_is_online_shop" );
 	$result   = array();
 	foreach ( $products as $product ) {
 		$result[ $product['itemCode'] ] = $product['fee'] / 10000;

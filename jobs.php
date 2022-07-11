@@ -40,7 +40,7 @@ function zero_all_products() {
 
 function update_price_data() {
 	error_log( "Updating price data" );
-	$sep_prices_list = fetch_all_sepidar_products_price();
+	$sep_prices_list = fetch_all_sepidar_products_price(false);
 	foreach ( $sep_prices_list as $sku => $price ) {
 		$product_id = wc_get_product_id_by_sku( $sku );
 		if ( $product_id == 0 ) {
@@ -50,7 +50,23 @@ function update_price_data() {
 		if ( $price > 1 ) {
 			$product = wc_get_product( $product_id );
 			$product->set_regular_price( $price );
-//	        $product->set_sale_price( $price );
+			$product->save();
+		}
+	}
+}
+
+function update_price_data_sale() {
+	error_log( "Updating sale price data" );
+	$sep_prices_list = fetch_all_sepidar_products_price(true);
+	foreach ( $sep_prices_list as $sku => $price ) {
+		$product_id = wc_get_product_id_by_sku( $sku );
+		if ( $product_id == 0 ) {
+			continue;
+		}
+		error_log( 'Found price product: ' . $sku );
+		if ( $price > 1 ) {
+			$product = wc_get_product( $product_id );
+	        $product->set_sale_price( $price );
 			$product->save();
 		}
 	}
