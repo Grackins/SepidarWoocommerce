@@ -36,6 +36,7 @@ function zero_all_products() {
 		$product->set_stock_quantity( 0 );
 		$product->save();
 	}
+	error_log( "zero all products quantity ended" );
 }
 
 function update_price_data() {
