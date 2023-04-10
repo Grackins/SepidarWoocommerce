@@ -11,7 +11,7 @@ function update_quantity_data() {
 		if ( $product_id == 0 ) {
 			continue;
 		}
-		error_log( 'Found quantity product: ' . $sku );
+		error_log( 'Found quantity product: ' . $sku . ' with numbers of: ' . $quantity );
 		$product = wc_get_product( $product_id );
 		$product->set_stock_quantity( $quantity );
 		$product->save();
