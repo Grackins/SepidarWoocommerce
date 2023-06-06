@@ -171,9 +171,13 @@ function sw_api_register_invoice( $order, $factor_id ) {
 function sw_api_register_delivery( $order, $factor_id ) {
 	global $REQUEST_HEADERS;
 	error_log( "send delivery $order->id" );
+	if ($order->get_payment_method() == "operator")
+		$sale_type = 5;
+	else
+		$sale_type = 2;
 	$data = array(
 		'invoicenumber'  => intval( $factor_id ),
-		'saletypenumner' => 2,
+		'saletypenumner' => $sale_type,
 	);
 	$args = array(
 		'headers'     => $REQUEST_HEADERS,
