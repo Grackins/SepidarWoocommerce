@@ -49,6 +49,12 @@ function sw_get_sale_type( $product, $payment ) {
 	return 2;
 }
 
+function sw_get_customer_type( $payment ) {
+	if ($payment == "operator")
+		return "55785";
+	return "20001";
+}
+
 function fetch_all_sepidar_products_quantity() {
 	global $REQUEST_HEADERS;
 	global $QUANTITY_FIELD_NAME, $SKU_FIELD_NAME;
@@ -119,9 +125,10 @@ function sw_api_register_invoice( $order, $factor_id ) {
 		$sale_type = sw_get_sale_type( $product, $payment_method );
 		$price     = $product->get_price();
 		$fee       = $price * 10000;
+		$customer  = sw_get_customer_type( $payment_method);
 		$item_data = array(
 			"sourceid"       => 0,
-			"customercode"   => "20001",
+			"customercode"   => $customer,
 			"saletypenumber" => $sale_type,
 			"discount"       => 0,
 			"addition"       => 0,
