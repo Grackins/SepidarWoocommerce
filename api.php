@@ -35,8 +35,8 @@ function sw_get_invoice_number( $order_id ) {
 	return $order_id - $SW_BASE_INVOICE_NUMBER;
 }
 
-function sw_get_sale_type( $product, $payment ) {
-	if ($payment == "operator")
+function sw_get_sale_type( $product, $payment, $changed ) {
+	if (($payment == "operator") && ($changed != 1))
 		return 5;
 	//"melli_new" and "WC_ZPal" is others
 	if ( $product->get_sale_price() == null ) {
@@ -49,8 +49,8 @@ function sw_get_sale_type( $product, $payment ) {
 	return 2;
 }
 
-function sw_get_customer_type( $payment ) {
-	if ($payment == "operator")
+function sw_get_customer_type( $saleType ) {
+	if ($saleType == 5)
 		return "55785";
 	return "20001";
 }
@@ -118,14 +118,15 @@ function sw_api_register_invoice( $order, $factor_id ) {
 	$date_paid = $order->get_date_paid();
 	$payment_method = $order->get_payment_method();
 	$date      = $date_paid->format( 'Y-m-d' );
+	$changed   = get_post_meta($order->ID, 'has_change', true);
 	foreach ( $order->get_items() as $item_key => $item ) {
 		$quantity  = $item->get_quantity();
 		$product   = $item->get_product();
 		$item_sku  = $product->get_sku();
-		$sale_type = sw_get_sale_type( $product, $payment_method );
+		$sale_type = sw_get_sale_type( $product, $payment_method, $changed );
 		$price     = $product->get_price();
 		$fee       = $price * 10000;
-		$customer  = sw_get_customer_type( $payment_method);
+		$customer  = sw_get_customer_type( $sale_type );
 		$item_data = array(
 			"sourceid"       => 0,
 			"customercode"   => $customer,
